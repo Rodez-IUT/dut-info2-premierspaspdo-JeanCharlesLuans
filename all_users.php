@@ -21,7 +21,7 @@
 <?php
 
 $host = 'localhost';
-$port = '8889';
+$port = '3306';
 $db = 'my_activities';
 $user = 'root';
 $pass = 'root';
@@ -45,7 +45,16 @@ try {
 <h1>All Users</h1>
 
 <?php
-$stmt = $pdo->query('select users.id as user_id, username, email, s.name as status from users join status s on users.status_id = s.id');
+	$start_latter = 'e';
+	$status_id = 2;
+	$sql = "select users.id as user_id, username, email, s.name as status
+		    from users
+			join status s
+			on users.status_id = s.id
+			where username like '$start_latter%' and status_id = $status_id
+			order by username";
+			
+	$stmt = $pdo->query($sql);
 ?>
 <table>
     <tr>
