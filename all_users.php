@@ -44,17 +44,39 @@ try {
 
 <h1>All Users</h1>
 
+<form action="all_users.php" method="get">
+    Choix d'une lettre : <br/>
+    <input type="text" name="lettre"> <br/>
+    Choix d'un status : <br/>
+    <select name="status">
+        <option value="2">Active account</option>
+        <option value="1">Waiting for account validation</option>
+    </select> <br/>
+
+    <input type="submit" name="Envoie">
+
+</form>
+
 <?php
-	$start_latter = 'e';
-	$status_id = 2;
-	$sql = "select users.id as user_id, username, email, s.name as status
-		    from users
-			join status s
-			on users.status_id = s.id
-			where username like '$start_latter%' and status_id = $status_id
-			order by username";
-			
-	$stmt = $pdo->query($sql);
+    
+    if(isset($_GET["lettre"]) && isset($_GET["status"])) {
+        $start_latter = $_GET["lettre"];
+        $status_id = (int)$_GET["status"];
+        $sql = "select users.id as user_id, username, email, s.name as status
+                from users
+                join status s
+                on users.status_id = s.id
+                where username like '$start_latter%' and status_id = $status_id
+                order by username";
+    } else {
+    	$sql = "select users.id as user_id, username, email, s.name as status
+                from users
+                join status s
+                on users.status_id = s.id
+                order by users.id";
+    }
+    			
+    $stmt = $pdo->query($sql);
 ?>
 <table>
     <tr>
