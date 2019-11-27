@@ -1,0 +1,1 @@
+On fait une injection de SQL dans le script PhP car on n'a pas "proteger" le code. Le script PhP interprete donc le code dans le formulaire comme dans une requete
