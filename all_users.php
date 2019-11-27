@@ -62,21 +62,31 @@ try {
     if(isset($_GET["lettre"]) && isset($_GET["status"])) {
         $start_latter = $_GET["lettre"];
         $status_id = (int)$_GET["status"];
-        $sql = "select users.id as user_id, username, email, s.name as status
+        $stmt = $pdo->prepare("select users.id as user_id, username,    email, s.name as status
                 from users
                 join status s
                 on users.status_id = s.id
-                where username like '$start_latter%' and status_id = $status_id
-                order by username";
+                where username like ? and status_id = ?
+                order by username");
+        $stmt->execute([$start_latter."%", $status_id]);
+
+
+
+
     } else {
+
     	$sql = "select users.id as user_id, username, email, s.name as status
                 from users
                 join status s
                 on users.status_id = s.id
                 order by users.id";
+
+        $stmt = $pdo->query($sql);
+        
     }
-    			
-    $stmt = $pdo->query($sql);
+    	
+    		
+    
 ?>
 <table>
     <tr>
