@@ -63,7 +63,7 @@ try {
     if(isset($_GET["lettre"]) && isset($_GET["status"])) {
         $start_latter = $_GET["lettre"];
         $status_id = (int)$_GET["status"];
-        $stmt = $pdo->prepare("select users.id as user_id, username,    email, s.name as status
+        $stmt = $pdo->prepare("select users.id as user_id, username, email, s.name as status, users.status_id
                 from users
                 join status s
                 on users.status_id = s.id
@@ -76,7 +76,7 @@ try {
 
     } else {
 
-    	$sql = "select users.id as user_id, username, email, s.name as status
+    	$sql = "select users.id as user_id, username, email, s.name as status, users.status_id
                 from users
                 join status s
                 on users.status_id = s.id
@@ -102,6 +102,12 @@ try {
         <td><?php echo $row['username']?></td>
         <td><?php echo $row['email']?></td>
         <td><?php echo $row['status']?></td>
+
+        <?php
+            if($row['status_id']  != 3) {
+                echo '<td>  <a href="all_users.php?status_id=3&user_id='.$row['user_id'].'&action=askDeletion"> Ask deletion </a> </td>';
+            }
+        ?>
     </tr>
     <?php } ?>
 </table>
