@@ -59,7 +59,20 @@ try {
 </form>
 
 <?php
-    
+
+    if(isset($_GET["status_id"]) && isset($_GET["user_id"]) && isset($_GET["action"]) ) {
+        $user_id = (int)$_GET["user_id"];
+        $actionDate = date("Y-m-d H:i:s");
+        $actionName = $_GET["action"];
+
+        $stmt = $pdo->prepare("insert into action_log (action_date, action_name, user_id) values (?, ?, ?)");
+        $stmt->execute([$actionDate, $actionName, $user_id]);
+
+        $stmt = $pdo->prepare("update users set status_id = 3 where id = ?");
+        $stmt->execute([$user_id]);
+    }
+
+
     if(isset($_GET["lettre"]) && isset($_GET["status"])) {
         $start_latter = $_GET["lettre"];
         $status_id = (int)$_GET["status"];
@@ -71,11 +84,7 @@ try {
                 order by username");
         $stmt->execute([$start_latter."%", $status_id]);
 
-
-
-
     } else {
-
     	$sql = "select users.id as user_id, username, email, s.name as status, users.status_id
                 from users
                 join status s
@@ -83,11 +92,7 @@ try {
                 order by users.id";
 
         $stmt = $pdo->query($sql);
-        
-    }
-    	
-    		
-    
+    }   
 ?>
 <table>
     <tr>
